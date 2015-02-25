@@ -20,7 +20,7 @@
         [TestMethod]
         public void EmptyListCountAfterAddingTwoTimes()
         {
-            const int expectedCount = 2;
+            var expectedCount = 2;
             for (int i = 0; i < expectedCount; i++)
             {
                 this.dynamicList.Add(i);
@@ -75,6 +75,7 @@
                     testEmptyListContains);
         }
 
+        [TestMethod]
         public void ListContainsTestedValue()
         {
             var firstListItem = 5;
@@ -97,6 +98,101 @@
         public void TestAccessingElementOfAnEmptyList()
         {
             var item = this.dynamicList[0];
+        }
+
+        [TestMethod]
+        public void TestRemoveContainedElement()
+        {
+            var expectedCount = 2;
+            for (int i = 0; i < expectedCount; i++)
+            {
+                this.dynamicList.Add(i);
+            }
+
+            Assert.AreEqual(expectedCount, this.dynamicList.Count);
+
+            this.dynamicList.Remove(1);
+            Assert.AreEqual(
+                1,
+                this.dynamicList.Count,
+                "List.Remove() failed -> Expected list element count: 1. Contains value: {0}",
+                    this.dynamicList.Count);
+        }
+
+        [TestMethod]
+        public void TestRemoveNotContainedElement()
+        {
+            var expectedCount = 2;
+            for (int i = 0; i < expectedCount; i++)
+            {
+                this.dynamicList.Add(i);
+            }
+
+            Assert.AreEqual(expectedCount, this.dynamicList.Count);
+
+            var removeMethodOutputValue = this.dynamicList.Remove(2);
+
+            Assert.AreEqual(
+                -1,
+                removeMethodOutputValue,
+                "List.Remove() failed -> Expected return value when element not found: -1. Actual return value: {0}",
+                    removeMethodOutputValue);
+        }
+
+        [TestMethod]
+        public void TestRemoveElementAtValidIndex()
+        {
+            var firstListItem = 5;
+            var secondListItem = 15;
+            var thirdListItem = 50;
+
+            this.dynamicList.Add(firstListItem);
+            this.dynamicList.Add(secondListItem);
+            this.dynamicList.Add(thirdListItem);
+
+            Assert.AreEqual(secondListItem, this.dynamicList[1]);
+
+            this.dynamicList.RemoveAt(1);
+
+            Assert.AreEqual(
+                thirdListItem,
+                this.dynamicList[1],
+                "List.RemoveAt() failed -> Expected list element count: {0}. Contains value: {1}",
+                    thirdListItem,
+                    this.dynamicList[1]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestRemoveElementAtInvalidIndex()
+        {
+            this.dynamicList.RemoveAt(1);
+        }
+
+        [TestMethod]
+        public void TestElementSetterAtValidIndex()
+        {
+            var assignedValue = 5;
+            this.dynamicList.Add(2);
+            this.dynamicList.Add(2);
+            this.dynamicList.Add(2);
+            this.dynamicList[2] = assignedValue;
+
+            Assert.AreEqual(
+                assignedValue,
+                this.dynamicList[2],
+                "List element setter failed -> Expected value at position [0]: {0}. Actual value: {1}",
+                    assignedValue,
+                    this.dynamicList[2]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestElementSetterAtInvalidIndex()
+        {
+            var assignedValue = 5;
+            this.dynamicList.Add(2);
+            this.dynamicList[2] = assignedValue;
         }
     }
 }
